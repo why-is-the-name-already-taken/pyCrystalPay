@@ -17,7 +17,7 @@ Get paid easily
 
 from pycrystalpay import CrystalPay 
 
-crystal = CrystalPay('логин_кассы','секретный_ключ_1')
+    crystal = CrystalPay('логин_кассы','секретный_ключ_1')
 
 
 
@@ -33,8 +33,8 @@ crystal = CrystalPay('логин_кассы','секретный_ключ_1')
  
  Пример : {'YANDEX': 0, 'QIWI': 0, 'VISAMASTER.RUR': 0}
 
-balance = crystal.get_balance()
-print(balance)
+    balance = crystal.get_cash_balance()
+    print(balance)
 
  
  
@@ -42,35 +42,40 @@ print(balance)
  
  Генерация ссылки для оплаты
  --------------------------------------------------------
- Вернет список [id_платежа, ссылка на оплату]
+ Вернет объект Payment(о нём ниже)
  
- crystal.generate_pay_link(amount,redirect) 
- 
- amout - сумма платежа.
- 
- redirect - НЕОБЯЗАТЕЛЬНЫЙ  ссылка, на которую пользователь будет направлен после успешной оплаты.
+    crystal.create_invoice(amount) 
+
+  amount - сумма на оплату(целочисл.)</br>
+  currency - 	Валюта суммы (конвертируется в рубли) (USD, BTC, ETH, LTC…) (необязательно)</br>
+  liftetime - Время жизни счёта для оплаты, в минутах (необязательно)</br>
+  redirect - Ссылка для перенаправления после оплаты (необязательно)</br>
+  callback - Ссылка на скрипт, на который будет отправлен запрос, после успешного зачисления средств на счёт кассы (необязательно)</br>
+  extra - Любые текстовые данные, пометка/комментарий. Будет передано в callback или при проверке статуса платежа (необязательно)</br>
+  payment_system - Если нужно принудительно указать платежную систему (необязательно).</br>
+
  
   
-
-   
- 
- 
-
- Генерация ссылки для оплаты по id платежа
- --------------------------------------------------------
- Вернет ссылку на оплату
-
-  crystal.gen_pay_link_by_id(pay_id)#pay_id - id платежа
-
-     
- 
- 
  
  Получение статуса платежа
 --------------------------------------------------------
- Вернёт список [статус оплаты(True/False),сумма_оплаты]
+  Проверка оплаты происходит через объект Payment.
 
- crystal.get_pay_status(pay_id) # pay_id - id платежа  
+
+    payment = crystal.create_invoice(amount) 
+    payment.url #Ссылка на оплату
+    payment.amount # Сумма к оплате
+    payment.id #id оплаты
+    
+    if payment.if_paid():
+        payment.paymethod # Метод, которым была произведена оплата. "btc", "qiwi"
+        # Оплата была произведена
+    else:
+        # Счет не оплачен
+        
+Если известен ID платежа, то нам нужно сконструировать объект Payment
+
+    payment = crystal.construct_payment_by_id(payment_id)
 
   
   
