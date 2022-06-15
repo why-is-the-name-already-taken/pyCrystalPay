@@ -1,1 +1,1 @@
-from .pycrystalpay import CrystalPay
+from .CrystalPay import CrystalPay
