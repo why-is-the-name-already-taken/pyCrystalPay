@@ -15,7 +15,7 @@ Get paid easily
   
   
 
-from pycrystalpay import CrystalPay 
+    from pycrystalpay import CrystalPay 
 
     crystal = CrystalPay('логин_кассы','секретный_ключ_1')
 
